@@ -1,0 +1,36 @@
+--CREATE A DATABASE FOR A HOME DECOR STORE:
+create table decor_store (id integer primary key, title text, price numeric, color text, quantity integer);
+
+insert into decor_store values
+(1, "boho pillow", 22.95, "black_and_cream", 2);
+insert into decor_store values
+(2, "statement tiger pillow", 47.95, "orange", 5);
+insert into decor_store values (3, "palm leaf pillow", 19.99, "pink", 3);
+
+insert into decor_store values (4, "zebra pillow", 59.99, "green", 2);
+
+insert into decor_store values (5, "protea flowers pillow", 29.99, "blue", 1);
+
+insert into decor_store values (6, "joshua tree candle", 39.95, "yellow", 2);
+insert into decor_store values (7, "lavender candles", 17.95, "white", 4);
+insert into decor_store values (8, "rose candles", 18.95, "pink", 6);
+insert into decor_store values (9, "iron candlestick", 14.95, "black", 2);
+insert into decor_store values (10, "banana candlestick", 32.95, "gold", 2);
+insert into decor_store values (11, "chiara vase", 34.95, "cream", 2);
+
+insert into decor_store values (12, "bold black vase", 43.95, "black", 3);
+insert into decor_store values (13, "modern vase", 17.95, "oatmeal", 1);
+insert into decor_store values (14, "brown bottle vase", 24.95, "brown", 1);
+insert into decor_store values (15, "hollowed vase", 47.95, "cream", 2);
+
+--DISPLAY THE DATABASE IN ORDER OR ASCENDING PRICE: 
+select * from decor_store order by price asc;
+
+--GENERATE THE AVERAGE PRICE OF ITEMS IN THE DATABASE:
+select avg(price) from decor_store;
+
+
+
+
+
+
