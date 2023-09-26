@@ -1,0 +1,97 @@
+FOR THIS PROJECT, I FIRST CREATED A FEW DATA TABLES, THEN RAN SOME QUERIES TO ANALYZE THE DATA & RELATE SOME OF THE DATA FROM EACH TABLE
+
+--> DATA TABLES I CREATED:
+
+CREATE TABLE actors
+(id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT, 
+  movie TEXT, 
+  oscar_noms INTEGER);
+
+INSERT INTO actors
+VALUES (1, "Jennifer Aniston", "Wanderlust", 0);
+
+INSERT INTO actors
+VALUES (2, "Jennifer Lawrence", "Silver Linings Playbook", 4);
+
+
+INSERT INTO actors
+VALUES (3, "Meryl Streep", "It's Complicted", 21);
+
+INSERT INTO actors
+VALUES (4, "Brad Pitt", "Once Upon A Time In Hollywood", 7);
+
+INSERT INTO actors
+VALUES (5, "Leonardo DiCaprio", "Once Upon A Time In Hollywood", 7);
+
+INSERT INTO actors
+VALUES (6, "Bradley Cooper", "Silver Linings Playbook", 9);
+
+
+
+CREATE TABLE personal (partner_id INTEGER, name TEXT, state_born TEXT, siblings INTEGER, children INTEGER);
+
+INSERT INTO personal VALUES (0, "Jennifer Lawrence", "Kentucky", 2, 1);
+
+INSERT INTO personal VALUES (4, "Jennifer Aniston", "California", 2, 0);
+
+INSERT INTO personal VALUES (1, "Brad Pitt", "Oklahoma", 2, 4);
+
+INSERT INTO personal VALUES (0, "Bradley Cooper", "Pennsylvania", 1, 0);
+
+
+CREATE TABLE movies (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, release_date INTEGER, actorid_1 INTEGER, actorid_2 INTEGER);
+
+INSERT INTO movies VALUES (1, "Once Upon A Time In Hollywood", 2020, 4, 5);
+
+INSERT INTO movies VALUES (2, "It's Complicated", 2009, 3, 0);
+
+INSERT INTO movies VALUES (3, "Wanderlust", 2012, 1, 0);
+
+INSERT INTO movies VALUES (4, "Silver Linings Playbook", 2012, 2, 6);
+
+INSERT INTO movies VALUES (5, "Mr. and Mrs. Smith", 2005, 4, 0);
+
+
+
+-->DATA ANALYSIS:
+
+--To see which actors are originally from California:
+SELECT personal.name FROM personal WHERE state_born = "California";
+
+--To see which actor has the most Oscar nominations:
+SELECT actors.name, MAX(oscar_noms) FROM actors;
+
+--To see which actor has the least Oscar nominations:
+SELECT actors.name, MIN(oscar_noms) FROM actors;
+
+--To see which actors have been in a relationship before:
+SELECT actors.name, personal.name AS partner_name FROM actors JOIN personal ON actors.id=personal.partner_id; 
+
+--To see which actors have been in which movies:
+SELECT movies.title, actors.name FROM movies JOIN actors ON movies.actorid_1=actors.id;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
