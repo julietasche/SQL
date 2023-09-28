@@ -47,3 +47,19 @@ ON Feb.orderid=cust.order_id
 WHERE FEB.Quantity > 2
 AND length(orderid) = 6
 AND orderid <> 'Order ID';
+
+--To see all the products sold in February in Los Angeles and how many of each product were sold:
+SELECT Product, SUM(Quantity) FROM BIT_DB.FebSales
+WHERE location like '%Los Angeles%'
+GROUP BY Product;
+
+--To see which locations in New York had 3 or more orders in January, which locations they were and how many orders they had:
+SELECT distinct location, COUNT(orderID) AS Quantity_Sold
+FROM BIT_DB.JanSales
+WHERE location like '%NY%'
+AND length(orderID) = 6
+AND orderID <> 'Order ID'
+GROUP BY location
+HAVING COUNT(orderID) >= 3
+
+
