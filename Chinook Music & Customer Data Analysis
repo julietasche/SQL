@@ -1,0 +1,99 @@
+-->Below lists a series of 17 questions or requests posed about the "Chinook Database,"
+which contains 11 data tables about their music/customers/employees, and
+the SQL queries I wrote to uncover the answers. Enjoy!
+
+
+
+
+--Which customers are not in the US?:
+SELECT Customerid, FirstName, LastName, Country FROM customers WHERE
+country <> 'USA';
+
+Which customers are from from Brazil?:
+SELECT * FROM customers WHERE Country = 'Brazil';
+
+--Show the invoices of customers who are from Brazil:
+SELECT FirstName, LastName, Invoiceid, InvoiceDate, BillingCountry
+FROM invoices JOIN customers ON invoices.Customerid=customers.Customerid
+WHERE BillingCountry='Brazil';
+
+--Show the employees who are Sales Agents:
+SELECT * FROM employees WHERE Title = 'Sales Support Agent';
+
+--Show a unique/distinct list of billing countries from the Invoice table:
+SELECT DISTINCT BillingCountry FROM invoices;
+
+--Which invoices are associated with each sales agent (using the agent's full name)?:
+SELECT invoices.Invoiceid, invoices.InvoiceDate, employees.LastName, employees.FirstName, employees.Title FROM customers
+JOIN invoices ON invoices.Customerid=customers.Customerid
+JOIN employees ON customers.SupportRepid=employees.Employeeid;
+
+--Show the Invoice Total, Customer name, Country, and Sales Agent name for all invoices and customers:
+SELECT invoices.Total, customers.FirstName, customers.LastName, customers.Country,
+employees.LastName, employees.FirstName
+FROM customers
+JOIN invoices ON customers.Customerid=invoices.CustomerId
+JOIN employees ON customers.SupportRepId=employees.EmployeeId;
+
+--How many invoices were there in 2009?:
+SELECT COUNT(InvoiceId) AS Invoices2009 FROM invoices WHERE InvoiceDate LIKE '%2009%';
+
+--What were the total sales for 2009?:
+SELECT ROUND(SUM(Total),2) FROM invoices WHERE InvoiceDate LIKE '%2009%';
+
+--Write a query that includes the purchased track name with each invoice line ID:
+SELECT Name, InvoiceId FROM tracks JOIN invoice_items
+ON tracks.TrackId=invoice_items.TrackId;
+
+--Write a query that includes the purchased track name AND artist name with each invoice line ID:
+SELECT tracks.Name, artists.Name, InvoiceId FROM tracks
+JOIN invoice_items ON tracks.TrackId=invoice_items.TrackId
+JOIN albums ON tracks.AlbumId=albums.AlbumId
+JOIN artists ON albums.ArtistId=artists.ArtistId;
+
+--Show all the tracks and includes the album name, media type, and genre:
+SELECT tracks.name AS Track_Name, albums.title AS Album_Title, media_types.name AS Media_Type, genres.Name AS Genre_Name
+FROM tracks
+JOIN albums ON tracks.AlbumId=albums.AlbumId
+JOIN media_types ON tracks.MediaTypeId=media_types.MediaTypeId
+JOIN genres ON tracks.GenreId=genres.GenreId;
+
+--What were the total sales made by each sales agent?:
+SELECT invoices.Total, employees.LastName, employees.FirstName
+FROM invoices
+JOIN customers ON invoices.CustomerId=customers.CustomerId
+JOIN employees on customers.SupportRepId=employees.EmployeeId
+GROUP BY employees.LastName;
+
+--Which sales agent made the most dollar sales in 2009?:
+SELECT invoices.Total, employees.LastName, employees.FirstName
+FROM invoices
+JOIN customers ON invoices.CustomerId=customers.CustomerId
+JOIN employees on customers.SupportRepId=employees.EmployeeId
+WHERE invoices.InvoiceDate LIKE '%2009%'
+GROUP BY employees.LastName
+ORDER BY invoices.Total DESC;
+
+--What is the name of the track that had the highest sales?:
+SELECT tracks.Name AS Track_Name, SUM(invoice_items.UnitPrice * invoice_items.Quantity) AS Sales
+FROM invoice_items
+JOIN tracks ON tracks.TrackId=invoice_items.TrackId
+GROUP BY Track_Name
+ORDER BY Sales DESC LIMIT 1;
+
+--What is the name of the customer with the highest CLV (Customer Lifetime Value)?:
+SELECT invoices.Total AS Lifetime_Spend, customers.FirstName, customers.LastName
+FROM invoices
+JOIN customers ON invoices.CustomerId=customers.CustomerId
+GROUP BY customers.LastName
+ORDER BY Lifetime_Spend DESC
+LIMIT 1;
+
+--Which genre is the least popular to purchase among customers?:
+SELECT genres.Name AS Genre, invoices.Total AS Sales
+FROM genres
+JOIN tracks ON genres.Genreid=tracks.GenreId
+JOIN invoice_items ON tracks.TrackId=invoice_items.TrackId
+JOIN invoices ON invoice_items.InvoiceId=invoices.InvoiceId
+GROUP BY Genre
+ORDER BY Sales ASC LIMIT 1;
